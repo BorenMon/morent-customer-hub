@@ -2,9 +2,9 @@
   <header>
     <nav class="container-fluid">
       <div class="lg:flex" id="logo">
-        <a href="/" id="logo-link">
+        <NuxtLink to="/" id="logo-link">
           <img class="logo-img" src="~/assets/logo/morent-logo.svg" alt="Logo Image" />
-        </a>
+        </NuxtLink>
       </div>
       <div id="menu-icon-wrapper">
         <button type="button" class="inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -13,27 +13,27 @@
         </button>
       </div>
       <div id="search-box-1" class="rounded-full">
-        <img src="~/assets/icons/search-normal.svg" alt="" class="icon ml-[18px] search-icon" @click="redirectSearch" />
+        <img src="~/assets/icons/search-normal.svg" alt="" class="icon ml-[18px] search-icon" @click="redirectSearch(router, searchQuery)" />
         <input type="text" class="placeholder:text-gray-400 search-input" name="search"
-          placeholder="Search something here" v-model="searchQuery" @keypress.enter.prevent="redirectSearch" />
+          placeholder="Search something here" v-model="searchQuery" @keypress.enter.prevent="redirectSearch(router, searchQuery)" />
       </div>
       <div id="icons-wrapper" class="space-x-[20px]">
-        <a href="/pages/favorites.html" class="nav-icon">
+        <nuxtLink to="/favorites" class="nav-icon">
           <img src="~/assets/icons/heart.svg" alt="" class="icon" />
-        </a>
-        <a href="/pages/auth.html" id="login" class="font-semibold !hidden">
+        </nuxtLink>
+        <NuxtLink to="/auth" id="login" class="font-semibold !hidden">
           Login&nbsp;<img src="~/assets/icons/login.svg" alt="" class="icon" />
-        </a>
+        </NuxtLink>
         <div class="relative inline-block text-left" id="profile">
-          <img src="" alt="Profile" id="nav-profile" class="shadow-md" />
+          <img :src="profileImageSrc" alt="Profile" id="nav-profile" class="shadow-md" />
           <div
             class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
             <div class="py-1" role="none">
-              <a href="/pages/profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" role="menuitem"
-                tabindex="-1" id="menu-item-0">Profile Setting</a>
+              <NuxtLink to="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" role="menuitem"
+                tabindex="-1" id="menu-item-0">Profile Setting</NuxtLink>
               <div class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer logout" role="menuitem"
-                tabindex="-1">
+                tabindex="-1" @click="confirmLogout">
                 Logout
               </div>
             </div>
@@ -44,9 +44,9 @@
     <nav class="container-fluid">
       <div class="space-x-[16px] w-[492px] flex">
         <div id="search-box-2">
-          <img src="~/assets/icons/search-normal.svg" alt="" class="icon ml-[18px] search-icon" @click="redirectSearch" />
+          <img src="~/assets/icons/search-normal.svg" alt="" class="icon ml-[18px] search-icon" @click="redirectSearch(router, searchQuery)" />
           <input type="text" class="placeholder:text-gray-400 search-input" name="search"
-            placeholder="Search something here" v-model="searchQuery" @keypress.enter.prevent="redirectSearch" />
+            placeholder="Search something here" v-model="searchQuery" @keypress.enter.prevent="redirectSearch(router, searchQuery)" />
         </div>
       </div>
     </nav>
@@ -57,9 +57,9 @@
     <div id="mobile-menu" :style="{ transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)' }"
       class="w-full bg-white px-6 py-6 sm:w-full">
       <div class="flex items-center justify-between">
-        <a href="/" id="logo-link">
+        <NuxtLink to="/" id="logo-link">
           <img class="logo-img" src="~/assets/logo/morent-logo.svg" alt="Logo Image" />
-        </a>
+        </NuxtLink>
         <button id="close-icon" @click="toggleMenu" type="button" class="rounded-md p-2.5 text-gray-700">
           <img src="~/assets/icons/close.svg" alt="" />
         </button>
@@ -67,45 +67,63 @@
       <div class="mt-6 flow-root" id="mobile-nav">
         <div class="-my-6 divide-y divide-gray-500/10">
           <div class="space-y-2 py-6">
-            <a href="/" class="active">Home</a>
-            <a href="/pages/category.html">Category</a>
-            <a href="/pages/blogs.html">Blogs</a>
-            <a href="/pages/about.html">About Us</a>
-            <a href="/pages/contact.html">Contact Us</a>
+            <NuxtLink to="/" :class="{ active: isPath('/') }">Home</NuxtLink>
+            <NuxtLink to="/category" :class="{ active: isPath('/category') }">Category</NuxtLink>
+            <NuxtLink to="/blogs" :class="{ active: isPath('/blogs') }">Blogs</NuxtLink>
+            <NuxtLink to="/about" :class="{ active: isPath('/about') }">About Us</NuxtLink>
+            <NuxtLink to="/contact" :class="{ active: isPath('/contact') }">Contact Us</NuxtLink>
           </div>
           <div class="space-y-2 py-6">
-            <a href="/pages/favorites.html">Favorites</a>
+            <NuxtLink to="/favorites" :class="{ active: isPath('/contact') }">Favorites</NuxtLink>
           </div>
           <div class="py-6 !hidden" id="mobile-login">
-            <a href="/pages/auth.html">Login</a>
+            <NuxtLink to="/auth" :class="{ active: isPath('/auth') }">Login</NuxtLink>
           </div>
           <div class="space-y-2 py-6 !hidden" id="mobile-profile">
-            <a href="/pages/profile.html">Profile Setting</a>
-            <a class="logout">Logout</a>
+            <NuxtLink to="/profile" :class="{ active: isPath('/profile') }">Profile Setting</NuxtLink>
+            <a class="logout" @click="confirmLogout">Logout</a>
           </div>
         </div>
       </div>
     </div>
     <ul id="nav" class="container-fluid space-x-[32px]">
-      <li class="active"><a href="/">Home</a></li>
-      <li><a href="/pages/category.html">Category</a></li>
-      <li><a href="/pages/blogs.html">Blogs</a></li>
-      <li><a href="/pages/about.html">About Us</a></li>
-      <li><a href="/pages/contact.html">Contact Us</a></li>
+      <li :class="{ active: isPath('/') }"><NuxtLink to="/">Home</NuxtLink></li>
+      <li :class="{ active: isPath('/category') }"><NuxtLink to="/category">Category</NuxtLink></li>
+      <li :class="{ active: isPath('/blogs') }"><NuxtLink to="/blogs">Blogs</NuxtLink></li>
+      <li :class="{ active: isPath('/about') }"><NuxtLink to="/about">About Us</NuxtLink></li>
+      <li :class="{ active: isPath('/contact') }"><NuxtLink to="/contact">Contact Us</NuxtLink></li>
     </ul>
   </header>
 </template>
 
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import Swal from 'sweetalert2';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { redirectSearch } from '~/utils/main';
+import { fetchProfile } from '~/utils/customer';
+
+import sampleProfileImage from '~/assets/images/sample-profile.jpg';
 
 // Reactive state to track whether the menu is open
 const isMenuOpen = ref(false);
 const searchQuery = ref('');
 const isDropdownVisible = ref(false);
-const profileImageSrc = ref('/assets/images/sample-profile.jpg'); // Default image
+const profileImageSrc = ref(sampleProfileImage); // Default image
+
+// Route handling
+const route = useRoute();
+const router = useRouter()
+const isCategoryPage = computed(() => isPath('/category'));
+
+function isPath(path) {
+  return route.path === path;
+}
+
+// Watch for route changes
+watch(() => route.path, () => {
+  isMenuOpen.value = false;
+})
 
 // Function to toggle the menu state
 function toggleMenu() {
@@ -148,24 +166,6 @@ onMounted(() => {
   });
 });
 
-// Simulate fetching profile
-async function fetchProfile() {
-  // Simulate an API call to fetch the profile
-  return { avatar: '/assets/images/sample-profile.jpg' }; // Example response
-}
-
-// Route handling to check if on category page
-const route = useRoute();
-const isCategoryPage = computed(() => route.path.includes('/pages/category'));
-
-// Redirect search function
-const redirectSearch = () => {
-  if (searchQuery.value) {
-    console.log(`Redirecting to search results for: ${searchQuery.value}`);
-    // Add logic for search redirection
-  }
-};
-
 // Toggle dropdown visibility
 const toggleDropdown = () => {
   isDropdownVisible.value = !isDropdownVisible.value;
@@ -186,10 +186,12 @@ const confirmLogout = () => {
     if (result.isConfirmed) {
       // Logout logic here
       console.log('Logged out.');
-      // Simulate a logout function and page reload
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      
+      // Reset the user data in Vuex store
+      // $store.commit('SET_USER', null);
+      // localStorage.removeItem('token');
+      // isDropdownVisible.value = false;
+      // Swal.fire('Logged out!', 'You are now logged out.', 'info');
     }
   });
 };

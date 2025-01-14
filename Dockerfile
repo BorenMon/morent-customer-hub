@@ -1,23 +1,27 @@
-# Use an official Node.js runtime as a parent image
-FROM node:22
+ARG NODE_VERSION=22
 
-# Set the working directory in the container
-WORKDIR /app
+FROM node:${NODE_VERSION}-slim AS base
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
+ARG PORT=3000
 
-# Install app dependencies
+WORKDIR /src
+
+# Build
+FROM base AS build
+
+COPY --link package.json package-lock.json ./
 RUN npm install
 
-# Copy the app's source code to the container
-COPY . .
+COPY --link . .
 
-# Build the Nuxt app
 RUN npm run build
 
-# Expose the port the app runs on
-EXPOSE 3000
+# Run
+FROM base
 
-# Command to run the app
-CMD ["node", ".output/server/index.mjs"]
+ENV PORT=$PORT
+ENV NODE_ENV=production
+
+COPY --from=build /src/.output /src/.output
+
+CMD [ "node", ".output/server/index.mjs" ]

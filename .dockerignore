@@ -1,2 +1,6 @@
-node_modules
-npm-debug.log
+/.nuxt
+/.output
+/node_modules
+
+.gitignore
+README.md

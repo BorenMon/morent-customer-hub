@@ -1,6 +1,8 @@
 services:
   app:
     container_name: morent-customer-hub_app
+    env_file:
+      - .env
     build: .
     ports:
-      - "7777:3000"
+      - $PORT:$PORT

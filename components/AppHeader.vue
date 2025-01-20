@@ -21,13 +21,13 @@
         <nuxtLink to="/favorites" class="nav-icon">
           <img src="~/assets/icons/heart.svg" alt="" class="icon" />
         </nuxtLink>
-        <NuxtLink to="/auth" id="login" class="font-semibold !hidden">
+        <NuxtLink v-if="!authStore.isAuthenticated" to="/auth#login" id="login" class="font-semibold">
           Login&nbsp;<img src="~/assets/icons/login.svg" alt="" class="icon" />
         </NuxtLink>
-        <div class="relative inline-block text-left" id="profile" @click="toggleDropdown">
+        <div v-if="authStore.isAuthenticated" class="relative inline-block text-left" id="profile" @click="toggleDropdown">
           <img :src="profileImageSrc" alt="Profile" id="nav-profile" class="shadow-md" />
           <div
-            class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+            class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" :class="{ hidden: !isDropdownVisible }"
             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
             <div class="py-1" role="none">
               <NuxtLink to="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" role="menuitem"
@@ -101,9 +101,11 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { redirectSearch } from '~/utils/main';
-import { fetchProfile } from '~/utils/customer';
+import { useAuthStore } from '~/stores/auth';
 
 import sampleProfileImage from '~/assets/images/sample-profile.jpg';
+
+const authStore = useAuthStore()
 
 // Reactive state to track whether the menu is open
 const isMenuOpen = ref(false);
@@ -116,7 +118,7 @@ const route = useRoute();
 const router = useRouter()
 const isCategoryPage = computed(() => isPath('/category'));
 
-function isPath(path) {
+function isPath(path: string) {
   return route.path === path;
 }
 
@@ -131,7 +133,7 @@ function toggleMenu() {
 }
 
 // Function to handle media query changes
-const handleResize = (e) => {
+const handleResize = (e: any) => {
   if (e.matches) {
     isMenuOpen.value = false; // Automatically close the mobile menu when screen width is greater than 1024px
   }
@@ -155,7 +157,7 @@ onMounted(() => {
   });
 
   // Hide dropdown when clicking outside
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', (event: any) => {
     if (
       isDropdownVisible.value &&
       !event.target.closest('#nav-profile') &&
@@ -184,14 +186,7 @@ const confirmLogout = () => {
     cancelButtonText: 'No',
   }).then((result) => {
     if (result.isConfirmed) {
-      // Logout logic here
-      console.log('Logged out.');
-      
-      // Reset the user data in Vuex store
-      // $store.commit('SET_USER', null);
-      // localStorage.removeItem('token');
-      // isDropdownVisible.value = false;
-      // Swal.fire('Logged out!', 'You are now logged out.', 'info');
+      authStore.logout()
     }
   });
 };

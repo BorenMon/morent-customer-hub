@@ -1,5 +1,6 @@
 import directusConfig from '~/configs/directusConfig';
 import { toast } from './alert';
+import { useAuthStore } from '@/stores/auth';
 
 // Define the response structure for better type safety
 interface ApiResponse<T> {
@@ -43,6 +44,8 @@ export const register = async (email: string, password: string): Promise<boolean
 
 export const login = async (email: string, password: string): Promise<boolean> => {
   try {
+    const authStore = useAuthStore();
+
     const response = await fetch(`${directusConfig.baseURL}/auth/login`, {
       method: 'POST',
       headers: {
@@ -54,8 +57,7 @@ export const login = async (email: string, password: string): Promise<boolean> =
     const data: ApiResponse<AuthData> = await response.json();
 
     if (response.ok) {
-      localStorage.setItem('access_token', data.data.access_token);
-      localStorage.setItem('refresh_token', data.data.refresh_token);
+      authStore.login({ name: 'RIHTY' }, data.data.access_token, data.data.refresh_token)
       toast('Login successful.', 'success', 'top');
       return true;
     } else {
@@ -77,10 +79,4 @@ export const logout = (): void => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   localStorage.removeItem('profile');
-};
-
-export const forbiddenPage = (): boolean => {
-  const access_token = localStorage.getItem('access_token');
-  const refresh_token = localStorage.getItem('refresh_token');
-  return !access_token || !refresh_token;
 };

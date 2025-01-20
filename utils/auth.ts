@@ -74,9 +74,3 @@ export const login = async (email: string, password: string): Promise<boolean> =
     return false;
   }
 };
-
-export const logout = (): void => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  localStorage.removeItem('profile');
-};

@@ -18,11 +18,11 @@
           placeholder="Search something here" v-model="searchQuery" @keypress.enter.prevent="redirectSearch(router, searchQuery)" />
       </div>
       <div id="icons-wrapper" class="space-x-[20px]">
-        <nuxtLink to="/favorites" class="nav-icon">
-          <img src="~/assets/icons/heart.svg" alt="" class="icon" />
+        <nuxtLink to="/favorites" class="nav-icon" v-if="authStore.isAuthenticated">
+          <img src="~/assets/icons/heart.svg" class="icon" />
         </nuxtLink>
-        <NuxtLink v-if="!authStore.isAuthenticated" to="/auth#login" id="login" class="font-semibold">
-          Login&nbsp;<img src="~/assets/icons/login.svg" alt="" class="icon" />
+        <NuxtLink v-if="!authStore.isAuthenticated" to="/auth#login" id="login" class="font-semibold h-[44px]">
+          Login&nbsp;<img src="~/assets/icons/login.svg" class="icon" />
         </NuxtLink>
         <div v-if="authStore.isAuthenticated" class="relative inline-block text-left" id="profile" @click="toggleDropdown">
           <img :src="profileImageSrc" alt="Profile" id="nav-profile" class="shadow-md" />
@@ -73,7 +73,7 @@
             <NuxtLink to="/about" :class="{ active: isPath('/about') }">About Us</NuxtLink>
             <NuxtLink to="/contact" :class="{ active: isPath('/contact') }">Contact Us</NuxtLink>
           </div>
-          <div class="space-y-2 py-6">
+          <div class="space-y-2 py-6" v-if="authStore.isAuthenticated">
             <NuxtLink to="/favorites" :class="{ active: isPath('/contact') }">Favorites</NuxtLink>
           </div>
           <div class="py-6 !hidden" id="mobile-login">

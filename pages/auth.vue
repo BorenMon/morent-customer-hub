@@ -97,11 +97,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { toast } from '~/utils/alert'
 import { register, login } from '~/utils/auth'
-// import { syncFavorites } from '../services/favorites.js'
 import { useRouter } from 'vue-router'
 
 definePageMeta({
@@ -173,6 +172,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import '~/assets/css/pages/auth.css';
+@import '~/assets/css/auth.css';
 @import url(https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css);
 </style>

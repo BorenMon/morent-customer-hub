@@ -1,7 +1,6 @@
 import axios from 'axios';
 import type { AxiosError, AxiosRequestHeaders, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
 import directusConfig from '~/configs/directusConfig';
-import { logout } from './auth';
 
 const api = axios.create({
   baseURL: directusConfig.baseURL,
@@ -60,11 +59,11 @@ api.interceptors.response.use(
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
           // Logout if refresh fails
-          logout();
+          
         }
       } else {
         // Logout if no refresh token or refresh failed
-        logout();
+        
       }
     }
 

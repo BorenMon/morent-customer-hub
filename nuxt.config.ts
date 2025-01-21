@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'url';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -11,8 +13,12 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
+    'nuxt-splide'
   ],
-  devtools: {
-    enabled: true
-  }
+  alias: {
+    'data': fileURLToPath(new URL('./assets/data', import.meta.url))
+  },
+  // devtools: {
+  //   enabled: true
+  // }
 })

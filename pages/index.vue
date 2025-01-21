@@ -251,7 +251,7 @@ import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()
 
-const { data, error } = await useAsyncData('data', async () => {
+const { data, status, error } = await useAsyncData('data', async () => {
   const slides = (await fetchCollection('slides?filter[status][_eq]=published'))
     .data
 
